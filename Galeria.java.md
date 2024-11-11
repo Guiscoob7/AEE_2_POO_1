@@ -1,161 +1,160 @@
-```markdown
-# Classe `Galeria` 🎨
-
-A classe `Galeria` representa uma galeria de arte, permitindo o gerenciamento de uma coleção de obras, incluindo a adição, remoção, e a busca por categoria.
-
-## Atributos
-
-- `artes` (List<Arte>) 🖼️: Lista que armazena as obras de arte presentes na galeria.
-
-## Construtor
-
-### `public Galeria()`
-
-Construtor da classe que inicializa a lista de obras de arte e adiciona algumas obras de exemplo.
-
-### Exemplo de uso:
-
 ```java
-Galeria galeria = new Galeria();
+import java.io.*; // 📦 Importa classes necessárias para manipulação de arquivos e serialização
+import java.util.ArrayList; // 📦 Importa a classe ArrayList para manipulação de listas dinâmicas
+import java.util.List; // 📦 Importa a interface List para representar listas
+import java.util.stream.Collectors; // 📦 Importa Collectors para operações de stream (filtragem, coleta)
 ```
 
-## Métodos
+Aqui, importamos classes essenciais para operações de entrada e saída de arquivos (`ObjectInputStream` e `FileInputStream`), além de listas dinâmicas e streams para manipulação eficiente de dados.
 
-### `public void adicionarArte(Arte arte)`
+---
 
-Adiciona uma nova obra de arte à galeria.
-
-- **Parâmetros**:
-  - `arte`: A obra de arte a ser adicionada à galeria.
-
-**Validações**:
-- Verifica se a obra não é nula.
-- Verifica se a obra ainda não está presente na galeria antes de adicioná-la.
-
-**Exemplo de uso**:
+### Declaração da Classe `Galeria`
 
 ```java
-galeria.adicionarArte(novaArte);
+public class Galeria { // 🖼️ Classe que representa uma galeria de artes
+  private List<Arte> artes; // 🖼️ Lista que armazena as artes na galeria
 ```
 
-### `public List<Arte> getArtes()`
+A classe `Galeria` armazena uma coleção de objetos `Arte`, permitindo adicionar, remover e carregar dados de artes, e realiza operações específicas sobre elas.
 
-Retorna a lista completa de obras de arte na galeria.
+---
 
-**Retorno**: `List<Arte>` - A lista de todas as obras de arte na galeria.
-
-### `public List<Arte> getArtesPorCategoria(String categoria)`
-
-Filtra e retorna as obras de uma categoria específica.
-
-- **Parâmetro**:
-  - `categoria`: O nome da categoria a ser filtrada.
-
-**Retorno**: `List<Arte>` - Lista das obras que pertencem à categoria especificada.
-
-**Exemplo de uso**:
+### Construtor da Classe `Galeria`
 
 ```java
-List<Arte> artesGotic = galeria.getArtesPorCategoria("Gótica");
+  // 🖼️ Construtor da classe Galeria, que inicializa a lista de artes e carrega as artes do arquivo
+  public Galeria() {
+    this.artes = new ArrayList<Arte>(); // 📝 Inicializa a lista de artes
+    inicializarArtes();
+    artes.addAll(carregarArtesDeArquivo("galeria.ser")); // 🗂️ Carrega as artes do arquivo .ser
+  }
 ```
 
-### `public void removerArte(Arte arte)`
+No construtor, inicializamos a lista de `Arte` e chamamos `inicializarArtes`, que carrega artes de exemplo, seguido por `carregarArtesDeArquivo`, que tenta carregar dados de um arquivo serializado para recuperar artes salvas.
 
-Remove uma obra específica da galeria.
+---
 
-- **Parâmetro**:
-  - `arte`: A obra de arte a ser removida.
-
-**Validações**:
-- Verifica se a obra existe na galeria antes de tentar removê-la.
-
-**Exemplo de uso**:
+### Método para Adicionar Arte
 
 ```java
-galeria.removerArte(arteAExcluir);
+  // 🖼️ Método para adicionar uma nova arte à galeria
+  public void adicionarArte(Arte arte) {
+    if (arte != null && !artes.contains(arte)) { // ✔️ Verifica se a arte não é nula e não está duplicada
+      artes.add(arte); // ➕ Adiciona a arte à lista
+    } else {
+      System.out.println("Arte inválida ou já existente."); // ❌ Informa que a arte é inválida ou já existe
+    }
+  }
 ```
 
-### `private void inicializarArtes()`
+`adicionarArte` recebe um objeto `Arte` e o adiciona à lista se ele não for nulo ou duplicado, exibindo uma mensagem se a adição falhar.
 
-Método privado que inicializa a galeria com algumas obras de arte de exemplo.
+---
 
-Este método é chamado automaticamente no construtor para adicionar obras de exemplo à galeria.
-
-## Código da Classe `Galeria`
+### Método para Obter Todas as Artes
 
 ```java
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Galeria {
-    // 🎨 Lista para armazenar todas as obras de arte na galeria
-    private List<Arte> artes;
-
-    // 🖼️ Construtor da galeria que inicializa a lista de artes e adiciona exemplos
-    public Galeria() {
-        this.artes = new ArrayList<>();  // 🎨 Inicializa a lista vazia
-        inicializarArtes();              // 🌱 Adiciona algumas obras de exemplo
-    }
-
-    // ➕ Adiciona uma nova obra de arte à galeria
-    public void adicionarArte(Arte arte) {
-        // ✅ Verifica se a obra não é nula e não está na lista antes de adicionar
-        if (arte != null && !artes.contains(arte)) {
-            artes.add(arte);
-        } else {
-            // ⚠️ Exibe uma mensagem caso a obra seja inválida ou já exista
-            System.out.println("Arte inválida ou já existente.");
-        }
-    }
-
-    // 📜 Retorna a lista completa de obras de arte na galeria
-    public List<Arte> getArtes() {
-        return artes;
-    }
-
-    // 🎯 Filtra e retorna as obras de uma categoria específica
-    public List<Arte> getArtesPorCategoria(String categoria) {
-        // 🔍 Usa um filtro para encontrar as obras que correspondem à categoria
-        return artes.stream()
-            .filter(arte -> arte.getCategoria().equalsIgnoreCase(categoria))
-            .collect(Collectors.toList());
-    }
-
-    // ❌ Remove uma obra específica da galeria
-    public void removerArte(Arte arte) {
-        // ✅ Verifica se a obra existe na galeria antes de tentar removê-la
-        if (arte != null && artes.contains(arte)) {
-            artes.remove(arte);
-        } else {
-            // ⚠️ Exibe uma mensagem caso a obra não seja encontrada
-            System.out.println("Arte não encontrada.");
-        }
-    }
-
-    // 🌱 Inicializa a galeria com algumas obras de arte de exemplo
-    private void inicializarArtes() {
-        // 🖼️ Adiciona artes com título, artista, descrição, caminho de imagem e categoria
-        adicionarArte(new Arte("A Obra Gótica", "Artista Gótico", "Descrição gótica", "src/main/java/recursos/gotico_imagens/acapa-1.png", "Gótica"));
-        adicionarArte(new Arte("Obra Nouveau", "Artista Nouveau", "Descrição Nouveau", "src/main/java/recursos/nouveau_imagens/artnouveau-capa.png", "Nouveau"));
-        adicionarArte(new Arte("Outra Obra Nouveau", "Artista Marie", "Vívido", "src/main/java/recursos/nouveau_imagens/alphonse-mucha-zodiac-1897.jpeg", "Nouveau"));
-    }
-}
+  // 🖼️ Método para obter todas as artes da galeria
+  public List<Arte> getArtes() {
+    return artes; // 🔄 Retorna a lista de artes
+  }
 ```
 
-## Exemplo Completo
+Esse método retorna a lista completa de artes na galeria, permitindo acesso externo à coleção completa de `Arte`.
+
+---
+
+### Filtragem por Categoria
 
 ```java
-// Criação de uma galeria
-Galeria galeria = new Galeria();
-
-// Adicionando uma nova obra
-Arte novaArte = new Arte("Nova Obra", "Novo Artista", "Descrição da nova obra", "/imagens/nova_obra.jpg", "Moderno");
-galeria.adicionarArte(novaArte);
-
-// Obtendo todas as obras de uma categoria
-List<Arte> obrasNouveau = galeria.getArtesPorCategoria("Nouveau");
-
-// Removendo uma obra
-galeria.removerArte(novaArte);
+  // 🎨 Método para filtrar as artes pela categoria
+  public List<Arte> getArtesPorCategoria(String categoria) {
+    return artes.stream() // 🎯 Inicia o fluxo de artes
+      .filter(arte -> arte.getCategoria().equalsIgnoreCase(categoria)) // 🔍 Filtra pela categoria
+      .collect(Collectors.toList()); // 📝 Coleta as artes filtradas em uma lista
+  }
 ```
+
+Aqui usamos o método `getArtesPorCategoria` para retornar uma lista de artes filtrada por categoria, ignorando diferenças de maiúsculas e minúsculas.
+
+---
+
+### Método para Remover Arte
+
+```java
+  // 🗑️ Método para remover uma arte da galeria
+  public void removerArte(Arte arte) {
+    if (arte != null && artes.contains(arte)) { // ✔️ Verifica se a arte não é nula e está na galeria
+      artes.remove(arte); // ➖ Remove a arte da lista
+    } else {
+      System.out.println("Arte não encontrada."); // ❌ Informa que a arte não foi encontrada
+    }
+  }
+```
+
+O método `removerArte` verifica a presença da arte na lista e a remove caso ela exista, informando se não for encontrada.
+
+---
+
+### Método Privado para Inicializar Artes de Exemplo
+
+```java
+  // 🖼️ Método privado que inicializa a galeria com algumas artes de exemplo
+  private void inicializarArtes() {
+    // 🎨 Exemplo de artes a serem adicionadas à galeria
+    adicionarArte(new Arte("Catedral de Notre-Dame de Reims, França", "Eugène Viollet-le-Duc", "Dedicada à Virgem Maria, a Catedral de Notre Dame é uma das catedrais góticas mais antigas do mundo", "src/main/java/recursos/gotico_imagens/acapa-1.png", "Gótica"));
+    adicionarArte(new Arte("F. Champenois Imprimeur-Éditeur", "Alfons Mucha", "“Champenois” é uma das obras mais conhecidas do artista tcheco Alphonse Mucha, um dos principais representantes do movimento Art Nouveau. Mucha era conhecido por suas pinturas, cartazes e ilustrações que celebravam a beleza feminina, o esplendor da natureza e a estética ornamental.", "src/main/java/recursos/nouveau_imagens/artnouveau-capa.png", "Nouveau"));
+  }
+```
+
+Esse método privado adiciona obras de exemplo à galeria, ideal para iniciar com uma coleção padrão.
+
+---
+
+### Método para Carregar Artes do Arquivo
+
+```java
+  private List<Arte> carregarArtesDeArquivo(String caminhoArquivo) {
+    List<Arte> artes = new ArrayList<>();
+    File arquivo = new File(caminhoArquivo);
+
+    // Verifica se o arquivo existe e não está vazio
+    if (!arquivo.exists() || arquivo.length() == 0) {
+      System.out.println("Arquivo vazio ou inexistente.");
+      return artes;
+    }
+
+    try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arquivo))) {
+      Object obj = ois.readObject();
+
+      // Verifica se o objeto lido é uma instância de List
+      if (obj instanceof List<?>) {
+        List<?> tempList = (List<?>) obj;
+
+        // Verifica se todos os elementos da lista são do tipo Arte
+        if (!tempList.isEmpty() && tempList.stream().allMatch(element -> element instanceof Arte)) {
+          artes = tempList.stream()
+                  .map(element -> (Arte) element)
+                  .collect(Collectors.toList());
+          System.out.println("Artes carregadas com sucesso.");
+        } 
+      } else {
+        System.out.println("Erro: O arquivo não contém uma lista válida.");
+      }
+    } catch (IOException | ClassNotFoundException e) {
+      System.out.println("Erro ao carregar artes do arquivo: " + e.getMessage());
+      e.printStackTrace();
+    } catch (ClassCastException e) {
+      System.out.println("Erro ao fazer o cast do objeto para List<Arte>: " + e.getMessage());
+      e.printStackTrace();
+    }
+    return artes;
+  }
+```
+
+Esse método lê as artes de um arquivo `.ser` e valida seu conteúdo, verificando se é uma lista válida de objetos `Arte`, e lida com exceções de E/S e classes não encontradas. Ele exibe mensagens informativas em caso de erro.
+
+---
+
+Esta implementação da `Galeria` oferece funcionalidades completas para gerenciar, carregar e armazenar artes de uma coleção, mantendo um fluxo de dados robusto e eficiente.
