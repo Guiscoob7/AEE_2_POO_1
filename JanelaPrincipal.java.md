@@ -1,204 +1,187 @@
 ```markdown
-# Documentação do Código da Janela Principal
+# Documentação da Janela Principal do Sistema de Galeria
 
-Este código representa uma aplicação gráfica em Java utilizando a biblioteca Swing, que exibe uma galeria de artes com categorias de Arte Gótica e Arte Nouveau. A interface gráfica é configurada com painéis, botões e menus, permitindo a interação com o usuário para exibir as artes da galeria e adicionar novas.
-
-## Classes e Pacotes
-
-- `JanelaPrincipal`: Classe principal da interface gráfica, responsável por inicializar e gerenciar os componentes da janela.
-- `Galeria`: Classe que contém as artes a serem exibidas na aplicação.
-- `Arte`: Classe representando uma arte específica, incluindo suas informações (como título e imagem).
-
-## Importações
-
-```java
-import javax.swing.*; // 📦 Importa as bibliotecas necessárias para construir a interface gráfica
-import java.awt.*; // 📦 Importa as classes para gerenciamento de layouts e cores
-import java.awt.event.ActionEvent; // 📋 Importa o evento para ação de botões
-import java.awt.event.ActionListener; // 📋 Importa o listener para capturar as ações de botões
-```
-
-## Estrutura da Janela Principal
-
-A `JanelaPrincipal` é a classe que representa a janela onde os componentes da galeria são exibidos.
-
-### Construtor `JanelaPrincipal()`
-
-- Inicializa a galeria com as artes.
-- Chama o método `inicializarUI()` para configurar a interface gráfica.
-
-### Método `inicializarUI()`
-
-Configura os componentes principais da interface gráfica:
-- Define o título da janela.
-- Configura o tamanho da janela.
-- Configura o comportamento de fechamento da janela.
-- Inicializa os painéis para exibição das artes e categorias.
-
-```java
-painelPrincipal = new JPanel(new BorderLayout()); // 🗂️ Cria o painel principal com layout de borda
-painelArtes = new JPanel(new GridLayout(0, 3, 10, 10)); // 🖼️ Cria painel para artes com grid de 3 colunas
-```
-
-### Método `adicionarMenu()`
-
-Adiciona a barra de menus à janela, com itens como:
-- **Arquivo**: Com a opção de "Sair" para fechar a aplicação e "Adicionar Arte" para abrir a janela de inserção de novas artes.
-
-### Método `adicionarCategorias()`
-
-Adiciona os botões para selecionar as categorias de arte:
-- **Arte Gótica**
-- **Arte Nouveau**
-
-Cada botão, ao ser clicado, exibe as artes da categoria correspondente.
-
-### Método `estilizarBotao(JButton botao)`
-
-Aplica um estilo personalizado para os botões de categorias, incluindo:
-- Cor de fundo escura.
-- Cor do texto cinza claro.
-- Fonte em negrito.
-
-### Método `mostrarGaleria(String categoria)`
-
-Exibe as artes da categoria selecionada (Gótica ou Nouveau) na galeria. A galeria é atualizada com as artes da categoria e pode ser rolada com o uso de um `JScrollPane`.
-
-### Método `criarPainelArte(Arte arte)`
-
-Cria um painel para cada arte, exibindo a imagem e as informações (título) da arte. Este painel é adicionado à galeria.
-
-### Método `main(String[] args)`
-
-Inicia a aplicação criando uma instância da `JanelaPrincipal` e tornando-a visível.
-
-## Estilo Visual
-
-- **Cores**: O fundo dos painéis e botões é predominantemente escuro, criando uma estética sóbria e misteriosa.
-- **Fontes**: Utiliza fontes serifadas, com títulos em negrito, para dar um estilo clássico e elegante.
-- **Emojis**: Foram utilizados emojis para representar ações e componentes, tornando o código visualmente mais interessante e fácil de entender.
-
-## Exemplo de Uso
-
-1. Ao abrir o programa, a janela principal com a galeria de arte Gótica será exibida.
-2. O usuário pode alternar entre as categorias **Arte Gótica** e **Arte Nouveau** clicando nos botões correspondentes.
-3. A partir do menu **Arquivo**, o usuário pode adicionar novas artes à galeria.
+Este código define a interface gráfica para um sistema de exibição de uma galeria de arte com categorias específicas de **Arte Gótica** e **Arte Nouveau**. Abaixo, você encontra a descrição de cada parte do código e seu funcionamento.
 
 ---
 
-Esse código cria uma interface gráfica interativa para exibir uma galeria de artes, com funcionalidades de navegação por categorias e adição de novas artes à galeria.
-
-## Código
+### Pacotes Importados
 
 ```java
-import javax.swing.*; // 📦 Importa as bibliotecas necessárias para construir a interface gráfica
-import java.awt.*; // 📦 Importa as classes para gerenciamento de layouts e cores
-import java.awt.event.ActionEvent; // 📋 Importa o evento para ação de botões
-import java.awt.event.ActionListener; // 📋 Importa o listener para capturar as ações de botões
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+```
 
-public class JanelaPrincipal extends JFrame { // 🖥️ Classe que representa a janela principal do programa
-    private Galeria galeria; // 🖼️ Instância da galeria de artes
-    private JPanel painelPrincipal; // 🗂️ Painel principal que contém todos os elementos
-    private JPanel painelArtes; // 🖼️ Painel onde as artes serão exibidas
+Esses pacotes são importados para a criação da interface gráfica (Swing), para gerenciar layouts e eventos, e para tratar interações do usuário, como cliques de botões.
 
-    public JanelaPrincipal() { // 🏗️ Construtor da janela principal
-        galeria = new Galeria(); // 🖼️ Inicializa a galeria com as artes
-        inicializarUI(); // 🛠️ Chama o método para configurar a interface gráfica
-    }
+---
 
-    private void inicializarUI() { // 🛠️ Método para configurar a interface gráfica
-        setTitle("Galeria Gótica & Nouveau"); // 📑 Define o título da janela
-        setSize(800, 600); // 📏 Define o tamanho da janela
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 🛑 Define o comportamento ao fechar a janela
+### Classe `JanelaPrincipal`
 
-        painelPrincipal = new JPanel(new BorderLayout()); // 🗂️ Cria o painel principal com layout de borda
-        painelPrincipal.setBackground(new Color(25, 20, 20)); // 🎨 Define a cor de fundo escura
-        painelArtes = new JPanel(new GridLayout(0, 3, 10, 10)); // 🖼️ Cria painel para artes com grid de 3 colunas
-        painelArtes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 🖼️ Adiciona margens ao painel
-        painelArtes.setBackground(new Color(34, 34, 34)); // 🎨 Define a cor de fundo do painel de artes
+A classe `JanelaPrincipal` herda de `JFrame` e é responsável pela criação da janela onde o conteúdo será exibido.
 
-        adicionarMenu(); // 🛠️ Adiciona o menu de opções
-        adicionarCategorias(); // 🛠️ Adiciona os botões de categorias (Arte Gótica, Arte Nouveau)
-        mostrarGaleria("Gótica"); // 🖼️ Exibe a galeria da categoria Gótica inicialmente
+#### Atributos:
 
-        add(painelPrincipal); // 📥 Adiciona o painel principal à janela
-    }
+```java
+private Galeria galeria;    // 🎨 Objeto que contém as artes da galeria
+private JPanel painelPrincipal; // 🖼️ Painel principal que organiza os componentes
+private JPanel painelArtes;    // 🖼️ Painel específico para exibir as artes
+```
 
-    private void adicionarMenu() { // 🍽️ Método para adicionar o menu
-        JMenuBar menuBar = new JMenuBar(); // 🍴 Cria a barra de menu
-        menuBar.setBackground(new Color(50, 50, 50)); // 🎨 Define a cor de fundo da barra de menu
+- **`galeria`**: Um objeto que contém as artes a serem exibidas.
+- **`painelPrincipal`**: O painel principal onde os outros componentes serão adicionados.
+- **`painelArtes`**: O painel que exibe as artes selecionadas.
 
-        JMenu menuArquivo = new JMenu("Arquivo"); // 📂 Cria o menu 'Arquivo'
-        menuArquivo.setForeground(Color.LIGHT_GRAY); // 🎨 Define a cor do texto do menu
+#### Construtor:
 
-        JMenuItem itemSair = new JMenuItem("Sair"); // ❌ Cria o item de menu 'Sair'
-        itemSair.addActionListener(e -> System.exit(0)); // ⚙️ Adiciona ação para fechar o aplicativo
-        menuArquivo.add(itemSair); // 📥 Adiciona o item ao menu 'Arquivo'
-
-        JMenuItem itemAdicionarArte = new JMenuItem("Adicionar Arte"); // ➕ Cria o item 'Adicionar Arte'
-        itemAdicionarArte.addActionListener(e -> { // ⚙️ Ação de adicionar arte
-            JanelaAdicionarArte janelaAdicionar = new JanelaAdicionarArte(galeria, this); // 🖼️ Abre a janela para adicionar arte
-            janelaAdicionar.setVisible(true); // 👀 Torna a janela de adicionar arte visível
-        });
-        menuArquivo.add(itemAdicionarArte); // 📥 Adiciona o item ao menu 'Arquivo'
-
-        menuBar.add(menuArquivo); // 📥 Adiciona o menu 'Arquivo' à barra de menus
-        setJMenuBar(menuBar); // 📋 Define a barra de menu para a janela
-    }
-
-    private void adicionarCategorias() { // 🖼️ Método para adicionar botões de categorias
-        JPanel painelCategorias = new JPanel(new FlowLayout(FlowLayout.CENTER)); // 🗂️ Painel de categorias com layout de fluxo
-        painelCategorias.setBackground(new Color(25, 20, 20)); // 🎨 Define o fundo escuro para o painel de categorias
-
-        JButton botaoGotico = new JButton("Arte Gótica"); // 🎨 Cria botão para Arte Gótica
-        botaoGotico.addActionListener(e -> mostrarGaleria("Gótica")); // ⚙️ Ação ao clicar (mostrar galeria Gótica)
-        estilizarBotao(botaoGotico); // 🎨 Estiliza o botão de Arte Gótica
-
-        JButton botaoNouveau = new JButton("Arte Nouveau"); // 🎨 Cria botão para Arte Nouveau
-        botaoNouveau.addActionListener(e -> mostrarGaleria("Nouveau")); // ⚙️ Ação ao clicar (mostrar galeria Nouveau)
-        estilizarBotao(bot
-
-aoNouveau); // 🎨 Estiliza o botão de Arte Nouveau
-
-        painelCategorias.add(botaoGotico); // 📥 Adiciona o botão de Arte Gótica ao painel
-        painelCategorias.add(botaoNouveau); // 📥 Adiciona o botão de Arte Nouveau ao painel
-        painelPrincipal.add(painelCategorias, BorderLayout.NORTH); // 📥 Adiciona o painel de categorias à parte superior da janela
-    }
-
-    private void estilizarBotao(JButton botao) { // 🎨 Método para estilizar botões
-        botao.setBackground(new Color(50, 50, 50)); // 🎨 Cor de fundo escura
-        botao.setForeground(Color.LIGHT_GRAY); // 🎨 Cor do texto clara
-        botao.setFont(new Font("Serif", Font.BOLD, 14)); // 🖋️ Fonte em negrito e tamanho 14
-    }
-
-    private void mostrarGaleria(String categoria) { // 🖼️ Método para mostrar a galeria de arte
-        painelArtes.removeAll(); // ❌ Remove todos os componentes da galeria anterior
-        galeria.getArtes(categoria).forEach(arte -> painelArtes.add(criarPainelArte(arte))); // 🖼️ Adiciona as artes da categoria à galeria
-        painelPrincipal.add(new JScrollPane(painelArtes), BorderLayout.CENTER); // 📥 Adiciona a galeria ao painel principal
-        revalidate(); // 🔄 Atualiza a interface
-        repaint(); // 🔄 Repinta a interface
-    }
-
-    private JPanel criarPainelArte(Arte arte) { // 🖼️ Método para criar o painel de uma arte
-        JPanel painelArte = new JPanel(); // 🖼️ Cria um painel para a arte
-        painelArte.setLayout(new BorderLayout()); // 🗂️ Define o layout para o painel da arte
-        painelArte.setBackground(new Color(40, 40, 40)); // 🎨 Cor de fundo do painel da arte
-
-        JLabel imagem = new JLabel(new ImageIcon(arte.getImagem())); // 🖼️ Cria o JLabel para exibir a imagem
-        painelArte.add(imagem, BorderLayout.CENTER); // 📥 Adiciona a imagem ao painel de arte
-
-        JLabel titulo = new JLabel(arte.getTitulo(), SwingConstants.CENTER); // 🏷️ Cria o JLabel para o título da arte
-        titulo.setForeground(Color.WHITE); // 🎨 Define a cor do texto como branco
-        painelArte.add(titulo, BorderLayout.SOUTH); // 📥 Adiciona o título abaixo da imagem
-
-        return painelArte; // 🖼️ Retorna o painel da arte
-    }
-
-    public static void main(String[] args) { // 🏁 Método principal para iniciar a aplicação
-        SwingUtilities.invokeLater(() -> { // 🏃 Executa a interface gráfica na thread de eventos do Swing
-            JanelaPrincipal janela = new JanelaPrincipal(); // 🖥️ Cria a janela principal
-            janela.setVisible(true); // 👀 Torna a janela visível
-        });
-    }
+```java
+public JanelaPrincipal() {
+    galeria = new Galeria(); // 🖼️ Inicializa a galeria de artes
+    inicializarUI();         // 🖥️ Chama o método para configurar a interface
 }
 ```
+
+O construtor inicializa o objeto `galeria` e chama o método `inicializarUI()` para configurar a interface gráfica.
+
+---
+
+### Método `inicializarUI`
+
+```java
+private void inicializarUI() {
+    setTitle("Galeria de Arte");        // 🎨 Define o título da janela
+    setSize(800, 600);                  // 🖥️ Define o tamanho da janela
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // ❌ Define a operação de fechamento
+    setLocationRelativeTo(null);        // 📍 Centraliza a janela na tela
+
+    painelPrincipal = new JPanel();     // 🖼️ Cria o painel principal
+    painelPrincipal.setLayout(new BorderLayout()); // 📐 Define o layout do painel principal
+    
+    adicionarMenu();                    // 🍽️ Adiciona o menu
+    adicionarCategorias();              // 🖼️ Adiciona as categorias
+
+    add(painelPrincipal);               // ➕ Adiciona o painel principal à janela
+    setVisible(true);                   // 👀 Torna a janela visível
+}
+```
+
+Este método configura a interface gráfica, define o título da janela, o tamanho e o comportamento de fechamento. Ele também chama os métodos de adição do menu e das categorias.
+
+---
+
+### Método `adicionarMenu`
+
+```java
+private void adicionarMenu() {
+    JMenuBar menuBar = new JMenuBar();  // 🍴 Cria a barra de menu
+    JMenu menuArquivo = new JMenu("Arquivo"); // 📂 Cria o menu de "Arquivo"
+    JMenuItem itemSair = new JMenuItem("Sair"); // ❌ Cria o item de "Sair"
+    itemSair.addActionListener(e -> System.exit(0));  // 🚪 Adiciona ação para fechar a aplicação
+    
+    JMenuItem itemAdicionarArte = new JMenuItem("Adicionar Arte"); // ➕ Cria o item para adicionar arte
+    itemAdicionarArte.addActionListener(e -> new JanelaAdicionarArte(galeria)); // 🖼️ Abre janela para adicionar arte
+
+    JMenuItem itemRemoverArte = new JMenuItem("Remover Arte"); // 🗑️ Cria o item para remover arte
+    itemRemoverArte.addActionListener(e -> new JanelaRemoverArte(galeria)); // 🖼️ Abre janela para remover arte
+
+    menuArquivo.add(itemSair);         // 📝 Adiciona "Sair" ao menu
+    menuArquivo.add(itemAdicionarArte); // ➕ Adiciona "Adicionar Arte" ao menu
+    menuArquivo.add(itemRemoverArte);   // 🗑️ Adiciona "Remover Arte" ao menu
+    menuBar.add(menuArquivo);           // 🍽️ Adiciona o menu ao menuBar
+    
+    setJMenuBar(menuBar);              // 🖥️ Define a barra de menu para a janela
+}
+```
+
+Este método cria e adiciona a barra de menu com as opções de "Sair", "Adicionar Arte" e "Remover Arte", conectando cada item a sua ação correspondente.
+
+---
+
+### Método `adicionarCategorias`
+
+```java
+private void adicionarCategorias() {
+    JTabbedPane abas = new JTabbedPane(); // 📚 Cria as abas para as categorias
+    JPanel painelGothic = new JPanel();   // 🖼️ Cria o painel para Arte Gótica
+    painelGothic.add(new JLabel("Arte Gótica: Obras relacionadas ao movimento gótico")); // 🖼️ Descrição da Arte Gótica
+    abas.addTab("Arte Gótica", painelGothic);  // 📑 Adiciona a aba de Arte Gótica
+    
+    JPanel painelNouveau = new JPanel(); // 🖼️ Cria o painel para Arte Nouveau
+    painelNouveau.add(new JLabel("Arte Nouveau: Obras inspiradas na natureza e linhas curvas")); // 🖼️ Descrição da Arte Nouveau
+    abas.addTab("Arte Nouveau", painelNouveau); // 📑 Adiciona a aba de Arte Nouveau
+
+    painelPrincipal.add(abas, BorderLayout.CENTER); // ➕ Adiciona as abas no painel principal
+}
+```
+
+Este método cria e adiciona as abas de categorias "Arte Gótica" e "Arte Nouveau", com uma breve descrição de cada categoria.
+
+---
+
+### Método `mostrarGaleria`
+
+```java
+public void mostrarGaleria(String categoria) {
+    painelArtes.removeAll();  // 🧹 Limpa o painel de artes antes de mostrar novas
+    List<Arte> artes = galeria.obterArtesPorCategoria(categoria); // 🖼️ Obtém as artes da categoria selecionada
+    
+    for (Arte arte : artes) {  // 🔄 Itera sobre as artes da categoria
+        painelArtes.add(new JLabel(arte.getImagem()));  // 🖼️ Adiciona a arte ao painel
+    }
+    painelArtes.revalidate();  // 🔄 Revalida o painel para atualização
+    painelArtes.repaint();     // 🎨 Redesenha o painel com as novas artes
+}
+```
+
+Este método exibe as artes da categoria selecionada, atualizando o painel de exibição de arte.
+
+## Componentes da Interface
+
+### Menu
+
+A barra de menu possui as seguintes opções:
+
+- **Arquivo**:
+  - **Sair**: Fecha a aplicação.
+  - **Adicionar Arte**: Abre a janela para adicionar uma nova arte à galeria.
+  - **Remover Arte**: Abre a janela para remover uma arte existente da galeria.
+
+### Categorias
+
+O sistema possui duas categorias principais de arte que podem ser selecionadas:
+
+- **Arte Gótica**: Mostra as obras do movimento artístico Gótico, com foco na verticalidade e nos vitrais das igrejas.
+- **Arte Nouveau**: Mostra as obras do movimento artístico Art Nouveau, conhecido pelas linhas curvas inspiradas na natureza.
+
+### Painel de Artes
+
+As artes são exibidas em um **`JPanel`** usando um **`GridLayout`** para organizar as imagens em um layout de grade de 3 colunas.
+
+---
+
+## Como Adicionar e Remover Artes
+
+A funcionalidade de adicionar e remover artes está disponível no menu:
+
+- **Adicionar Arte**: Abre uma nova janela onde o usuário pode inserir uma nova obra de arte na galeria.
+- **Remover Arte**: Abre uma janela onde o usuário pode remover uma arte existente da galeria.
+
+Esses processos são gerenciados pelas classes `JanelaAdicionarArte` e `JanelaRemoverArte`, que interagem com o objeto `galeria`.
+
+---
+
+## Exemplo de Uso
+
+Para usar a galeria, basta executar o programa. A janela principal será aberta com as categorias "Arte Gótica" e "Arte Nouveau". O usuário pode alternar entre as categorias e visualizar as artes relacionadas a cada movimento artístico.
+
+Se quiser adicionar ou remover artes, basta usar as opções no menu para interagir com a galeria.
+
+---
+
+## Conclusão
+
+Esta aplicação oferece uma interface gráfica simples e eficiente para a exibição de artes, com categorias bem definidas e um menu funcional para manipulação da galeria. O uso de **Swing** facilita a criação da interface gráfica, enquanto a estrutura do código permite fácil expansão e personalização.
+```
+
+Comentários com emojis foram adicionados ao código para facilitar a compreensão visual e tornar o código mais interativo e divertido.
