@@ -1,171 +1,149 @@
 ```markdown
-# Classe `JanelaAdicionarArte` 🖼️
+# Documentação da Classe `JanelaAdicionarArte` 🖥️
 
-A classe `JanelaAdicionarArte` cria uma janela para adicionar novas obras de arte à galeria. A interface permite ao usuário preencher informações sobre a obra, como título, artista, descrição, caminho da imagem e categoria. A classe também permite procurar um arquivo de imagem para associar à obra e adicionar a arte à galeria.
+A classe `JanelaAdicionarArte` representa a janela responsável por adicionar uma nova arte à galeria, permitindo ao usuário inserir informações como título, artista, descrição, caminho da imagem e categoria. Abaixo está uma descrição detalhada de cada parte do código.
 
-## Atributos
-
-- `campoTitulo` (JTextField) 🏷️: Campo de entrada para o título da obra de arte.
-- `campoArtista` (JTextField) 👩‍🎨: Campo de entrada para o nome do artista.
-- `campoDescricao` (JTextField) 📝: Campo de entrada para a descrição da obra.
-- `campoImagemCaminho` (JTextField) 🖼️: Campo de entrada para o caminho da imagem associada à obra.
-- `campoCategoria` (JTextField) 📚: Campo de entrada para a categoria da obra (ex: Gótica, Art Nouveau).
-- `galeria` (Galeria) 🎨: Objeto da classe `Galeria` responsável por gerenciar as obras de arte.
-- `janelaPrincipal` (JanelaPrincipal) 🏠: Objeto da classe `JanelaPrincipal` para atualizar a visualização após adicionar uma arte.
-
-## Construtor
-
-### `public JanelaAdicionarArte(Galeria galeria, JanelaPrincipal janelaPrincipal)`
-
-Constrói a janela para adicionar uma nova arte. Inicializa a interface gráfica e configura o título e o tamanho da janela.
-
-- **Parâmetros**:
-  - `galeria`: O objeto da classe `Galeria` onde a obra será adicionada.
-  - `janelaPrincipal`: O objeto da classe `JanelaPrincipal` para atualizar a visualização da galeria.
-
-### Exemplo de uso:
+## Importações 📦
 
 ```java
-JanelaAdicionarArte janela = new JanelaAdicionarArte(minhaGaleria, minhaJanelaPrincipal);
-janela.setVisible(true);
+import javax.swing.*; // 📦 Importa as bibliotecas necessárias para criar a interface gráfica
+import java.awt.*; // 📦 Importa classes para gerenciamento de layout e cores
+import java.io.*; // 📂 Importa as classes para trabalhar com arquivos
+import java.util.List; // 📦 Importa a lista para armazenar as artes
+import java.util.ArrayList; // 📦 Importa a classe ArrayList
 ```
 
-## Métodos
+## Atributos da Classe 🖼️
 
-### `private void inicializarUI()`
+- **campoTitulo**: `JTextField` para o título da arte ✍️
+- **campoArtista**: `JTextField` para o nome do artista ✍️
+- **campoDescricao**: `JTextField` para a descrição da arte ✍️
+- **campoImagemCaminho**: `JTextField` para o caminho da imagem 📂
+- **campoCategoria**: `JComboBox<String>` para selecionar a categoria da arte 📦
+- **galeria**: Instância da classe `Galeria` 🖼️
+- **janelaPrincipal**: Referência à janela principal 🖥️
+- **listaArtes**: `List<Arte>` para armazenar as artes 📂
 
-Método responsável por configurar a interface gráfica da janela. Cria campos de entrada e botões, e os organiza no layout.
+## Construtor da Classe 🏗️
 
-- **Ações**:
-  - Adiciona labels e campos de texto para título, artista, descrição, caminho da imagem e categoria.
-  - Adiciona um botão para procurar uma imagem e outro para adicionar a obra à galeria.
-
-### `private void abrirFileChooser()`
-
-Método que abre um seletor de arquivos para permitir ao usuário selecionar uma imagem para associar à obra de arte.
-
-- **Ação**: Quando o botão "Procurar" é clicado, o seletor de arquivos é exibido, permitindo que o usuário selecione um arquivo de imagem.
-
-### `private void adicionarArte()`
-
-Método responsável por coletar os valores dos campos de entrada e adicionar a nova obra de arte à galeria. 
-
-- **Ação**:
-  - Verifica se os campos obrigatórios (título, artista e categoria) estão preenchidos antes de adicionar a obra.
-  - Caso a arte seja adicionada com sucesso, a galeria é atualizada e uma mensagem de sucesso é exibida.
-
-### Exemplo de uso:
+O construtor inicializa os componentes da janela e configura suas propriedades.
 
 ```java
-// Criação da janela para adicionar arte
-JanelaAdicionarArte janela = new JanelaAdicionarArte(minhaGaleria, minhaJanelaPrincipal);
+public JanelaAdicionarArte(Galeria galeria, JanelaPrincipal janelaPrincipal) { // 🏗️ Construtor da janela de adicionar arte
+    this.galeria = galeria; // 📂 Inicializa a galeria
+    this.janelaPrincipal = janelaPrincipal; // 🖥️ Inicializa a janela principal
+    this.listaArtes = new ArrayList<>(); // 🖼️ Inicializa a lista de artes
 
-// Tornar a janela visível
-janela.setVisible(true);
+    setTitle("Adicionar Nova Arte"); // 📑 Define o título da janela
+    setSize(400, 350); // 📏 Define o tamanho da janela
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 🚪 Fecha a janela sem encerrar o aplicativo
+    inicializarUI(); // 🛠️ Chama o método para configurar a interface gráfica
+}
 ```
 
-## Código da Classe `JanelaAdicionarArte`
+## Método `inicializarUI()` 🛠️
+
+Este método configura a interface gráfica da janela, incluindo os campos de entrada, botões e layout.
 
 ```java
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
+private void inicializarUI() { // 🛠️ Método para configurar os componentes da interface gráfica
+    JPanel painelForm = new JPanel(new GridLayout(7, 2, 5, 5)); // 🗂️ Painel com grid para organizar os campos
+    painelForm.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 🎨 Define as margens internas do painel
 
-public class JanelaAdicionarArte extends JFrame {
-    // 🎨 Campos de entrada de dados para adicionar uma nova obra de arte
-    private JTextField campoTitulo;
-    private JTextField campoArtista;
-    private JTextField campoDescricao;
-    private JTextField campoImagemCaminho;
-    private JTextField campoCategoria;
+    campoTitulo = new JTextField(); // ✍️ Campo de texto para o título da arte
+    campoArtista = new JTextField(); // ✍️ Campo de texto para o artista
+    campoDescricao = new JTextField(); // ✍️ Campo de texto para a descrição da arte
+    campoImagemCaminho = new JTextField(); // 📂 Campo de texto para o caminho da imagem
 
-    // 🖼️ Referências à galeria e à janela principal para atualização
-    private Galeria galeria;
-    private JanelaPrincipal janelaPrincipal;
+    campoCategoria = new JComboBox<>(new String[] {"Gótica", "Nouveau"}); // 🔽 Opções de categoria
 
-    // 🖼️ Construtor para inicializar a janela de adicionar arte
-    public JanelaAdicionarArte(Galeria galeria, JanelaPrincipal janelaPrincipal) {
-        this.galeria = galeria;
-        this.janelaPrincipal = janelaPrincipal;
+    // 🏷️ Adiciona rótulos e campos ao painel
+    painelForm.add(new JLabel("Título:"));
+    painelForm.add(campoTitulo);
+    painelForm.add(new JLabel("Artista:"));
+    painelForm.add(campoArtista);
+    painelForm.add(new JLabel("Descrição:"));
+    painelForm.add(campoDescricao);
+    painelForm.add(new JLabel("Caminho da Imagem:"));
+    painelForm.add(campoImagemCaminho);
 
-        setTitle("Adicionar Nova Arte");       // 🖌️ Define o título da janela
-        setSize(400, 350);                     // 📏 Define o tamanho da janela
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // 🚪 Fecha a janela atual sem fechar o programa
-        inicializarUI();                       // 🎨 Inicializa a interface do usuário
+    // 🔍 Adiciona o botão "Procurar..." para buscar a imagem
+    JButton botaoProcurarImagem = new JButton("Procurar...");
+    botaoProcurarImagem.addActionListener(e -> abrirFileChooser()); // ⚙️ Abre o seletor de arquivos
+    painelForm.add(botaoProcurarImagem);
+
+    painelForm.add(new JLabel("Categoria:")); // 🏷️ Adiciona rótulo "Categoria" ao painel
+    painelForm.add(campoCategoria); // 📥 Adiciona o ComboBox de categoria ao painel
+
+    // ➕ Adiciona o botão "Adicionar" para adicionar a arte
+    JButton botaoAdicionar = new JButton("Adicionar");
+    botaoAdicionar.addActionListener(e -> adicionarArte()); // ⚙️ Ação para adicionar a arte
+    painelForm.add(botaoAdicionar);
+
+    add(painelForm); // 📥 Adiciona o painel ao corpo da janela
+}
+```
+
+## Método `abrirFileChooser()` 🔄
+
+Este método abre um seletor de arquivos para o usuário escolher a imagem da arte.
+
+```java
+private void abrirFileChooser() { // 🔄 Método para abrir o seletor de arquivos
+    JFileChooser fileChooser = new JFileChooser(); // 🗂️ Cria o seletor de arquivos
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // 📂 Permite selecionar apenas arquivos
+    int resultado = fileChooser.showOpenDialog(this); // ⚙️ Exibe a caixa de diálogo para abrir um arquivo
+    if (resultado == JFileChooser.APPROVE_OPTION) { // ✅ Verifica se o usuário aprovou a seleção
+        File arquivoSelecionado = fileChooser.getSelectedFile(); // 📝 Obtém o arquivo selecionado
+        String diretorioBase = new File("").getAbsolutePath(); // 📂 Obtém o diretório base
+        String caminhoRelativo = arquivoSelecionado.getAbsolutePath().substring(diretorioBase.length() + 1); // Calcula o caminho relativo
+        campoImagemCaminho.setText(caminhoRelativo); // 🖼️ Preenche o campo com o caminho relativo
     }
+}
+```
 
-    // 🎨 Inicializa os componentes gráficos e organiza o layout da janela
-    private void inicializarUI() {
-        JPanel painelForm = new JPanel(new GridLayout(7, 2, 5, 5)); // 🌐 Layout de grade para os campos do formulário
-        painelForm.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 📏 Margem interna do painel
+## Método `adicionarArte()` ➕
 
-        // 🎨 Campos de texto para entrada dos detalhes da arte
-        campoTitulo = new JTextField();
-        campoArtista = new JTextField();
-        campoDescricao = new JTextField();
-        campoImagemCaminho = new JTextField();
-        campoCategoria = new JTextField();
+Este método é responsável por adicionar a nova arte à galeria e salvar os dados em um arquivo.
 
-        // 🎫 Labels e campos para cada detalhe da arte
-        painelForm.add(new JLabel("Título:"));
-        painelForm.add(campoTitulo);
-        painelForm.add(new JLabel("Artista:"));
-        painelForm.add(campoArtista);
-        painelForm.add(new JLabel("Descrição:"));
-        painelForm.add(campoDescricao);
-        painelForm.add(new JLabel("Caminho da Imagem:"));
-        painelForm.add(campoImagemCaminho);
+```java
+private void adicionarArte() { // ➕ Método para adicionar uma nova arte
+    String titulo = campoTitulo.getText(); // 📝 Obtém o título da arte
+    String artista = campoArtista.getText(); // 📝 Obtém o nome do artista
+    String descricao = campoDescricao.getText(); // 📝 Obtém a descrição da arte
+    String imagemCaminho = campoImagemCaminho.getText(); // 📂 Obtém o caminho da imagem
+    String categoria = (String) campoCategoria.getSelectedItem(); // 📝 Obtém a categoria escolhida
 
-        // 📂 Botão para procurar imagem no sistema de arquivos
-        JButton botaoProcurarImagem = new JButton("Procurar...");
-        botaoProcurarImagem.addActionListener(e -> abrirFileChooser()); // 📂 Ação ao clicar no botão "Procurar"
-        painelForm.add(botaoProcurarImagem);
-
-        // 🎭 Campo de texto para a categoria da arte
-        painelForm.add(new JLabel("Categoria:"));
-        painelForm.add(campoCategoria);
-
-        // ➕ Botão para adicionar a arte
-        JButton botaoAdicionar = new JButton("Adicionar");
-        botaoAdicionar.addActionListener(e -> adicionarArte()); // 🎨 Ação ao clicar no botão "Adicionar"
-        painelForm.add(botaoAdicionar);
-
-        add(painelForm); // Adiciona o painel à janela
-    }
-
-    // 📂 Método para abrir o seletor de arquivos e definir o caminho da imagem
-    private void abrirFileChooser() {
-        JFileChooser fileChooser = new JFileChooser(); // 📂 Inicializa o seletor de arquivos
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // 📂 Apenas arquivos, sem diretórios
-        int resultado = fileChooser.showOpenDialog(this); // 🖼️ Exibe o seletor de arquivos
-
-        // ✅ Caso um arquivo seja selecionado, define o caminho no campo correspondente
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File arquivoSelecionado = fileChooser.getSelectedFile();
-            campoImagemCaminho.setText(arquivoSelecionado.getAbsolutePath()); // 📂 Define o caminho do arquivo selecionado
+    if (!titulo.isEmpty() && !artista.isEmpty() && categoria != null) { // ✅ Verifica se os campos obrigatórios estão preenchidos
+        Arte novaArte = new Arte(titulo, artista, descricao, imagemCaminho, categoria); // 🖼️ Cria um novo objeto Arte
+        listaArtes.add(novaArte); // 📥 Adiciona a nova arte à lista de artes
+        try {
+            salvarArtesEmArquivo(listaArtes); // 💾 Salva a lista de artes em um arquivo
+            galeria.adicionarArte(novaArte); // 📥 Adiciona a nova arte à galeria
+            janelaPrincipal.mostrarGaleria(categoria); // 🖼️ Atualiza a galeria na janela principal
+            JOptionPane.showMessageDialog(this, "Arte adicionada com sucesso!"); // 🎉 Exibe mensagem de sucesso
+        } catch (IOException e) {
+            dispose(); // 🚪 Fecha a janela de adicionar arte
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE); // ⚠️ Exibe mensagem de erro
     }
+}
+```
 
-    // 🎨 Método para criar e adicionar uma nova obra de arte à galeria
-    private void adicionarArte() {
-        // ✏️ Coleta os valores dos campos de entrada
-        String titulo = campoTitulo.getText();
-        String artista = campoArtista.getText();
-        String descricao = campoDescricao.getText();
-        String imagemCaminho = campoImagemCaminho.getText();
-        String categoria = campoCategoria.getText();
+## Método `salvarArtesEmArquivo()` 💾
 
-        // ✅ Verifica se os campos obrigatórios foram preenchidos antes de adicionar
-        if (!titulo.isEmpty() && !artista.isEmpty() && !categoria.isEmpty()) {
-            Arte novaArte = new Arte(titulo, artista, descricao, imagemCaminho, categoria); // 🖼️ Cria nova arte
-            galeria.adicionarArte(novaArte); // 🎨 Adiciona a arte na galeria
-            janelaPrincipal.mostrarGaleria(categoria); // 🔄 Atualiza a galeria na interface principal
-            JOptionPane.showMessageDialog(this, "Arte adicionada com sucesso!"); // 🎉 Mensagem de sucesso
-            dispose(); // 🚪 Fecha a janela após adicionar a arte
-        } else {
-            // ⚠️ Mensagem de erro caso algum campo obrigatório esteja vazio
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+Este método salva a lista de artes em um arquivo binário.
+
+```java
+private void salvarArtesEmArquivo(List<Arte> artes) throws IOException { // 💾 Método para salvar os dados das artes em um arquivo binário
+    try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("galeria.ser"))) { // 📂 Abre o arquivo para escrita binária
+        oos.writeObject(artes); // 📝 Escreve a lista de objetos Arte no arquivo
+        System.out.println("Artes salvas com sucesso."); // ✅ Mensagem de sucesso
+    } catch (IOException e) { // ⚠️ Captura qualquer erro de escrita no arquivo
+        JOptionPane.showMessageDialog(this, "Erro ao salvar as artes.", "Erro", JOptionPane.ERROR_MESSAGE); // Exibe mensagem de erro
+        e.printStackTrace(); // 🧰 Imprime a stack trace no console
+        throw e; // Relança a exceção IOException
     }
 }
 ```
